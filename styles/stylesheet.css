@@ -1,0 +1,13 @@
+.dropdown {
+    display: inline;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+}
+.show {display:inline;}
+
+#rating-filter {
+    border: 2px solid green;
+}
