@@ -36,15 +36,21 @@ const bookmarkList = (function(){
     function generateBookmarkTitleString(bookmarkList) {
         const items = bookmarkList.map((item) => generateItemElement(item));
         return items.join('');
-      }
+    };
       
       
-      function render() {
+    function render() {
         // filter needs to be adjusted for rating 1-5
-        let items = [ ...store.items ];
-        if (store.hideCheckedItems) {
-          items = items.filter(item => !item.checked);
+        const itemtemp = [ ...store.items];
+        if (store.ratingFilter !== null){
+            items = itemtemp.filter(item => (item.rating >= store.ratingFilter));
         }
+        else {
+            items = itemtemp;
+        }
+        console.log(items);
+
+        
       
       
         // render the shopping list in the DOM
@@ -53,7 +59,7 @@ const bookmarkList = (function(){
       
         // insert that HTML into the DOM
         $('.js-bookmark-list').html(bookmarkListItemsString);
-    }
+    };
 
    function handleAddition(){
     $('.js-create-form').submit(function (event) {
@@ -76,10 +82,10 @@ const bookmarkList = (function(){
    
 
    function generateItemElement(item){
-        let itemDesc = item.expanded ? `<div class="column hide"> ${item.desc} </div>` : '';
+        let itemDesc = item.expanded ? `<div class="column"> ${item.desc} </div>` : '';
         console.log(itemDesc);
        return `
-       <div class='row'>
+       <div class="${item.id}" class='row'>
         <div class= 'column'>${item.title}</div> 
         <div class= 'column'>${item.url} </div>
         <div class= 'column'>${item.rating}</div>
@@ -97,17 +103,17 @@ const bookmarkList = (function(){
 
 //    };
 
-//    function dropdown(){
-//     $("#filter").click(event => {
-//         event.preventDefault();
-//         $("#dropdown").toggleClass("show");
-//     });
-// };
+   function dropdown(){
+    $("#filter").click(event => {
+        event.preventDefault();
+        $("#dropdown").toggleClass("show");
+    });
+};
 function handlesExpandButton(){
     
     $(".js-bookmark-list").on('click', ".expand",  event => {
         event.preventDefault();
-        let id = $(event.target).data('item-index')
+        let id = $(event.target).data('item-index');
         console.log(id);
         store.toggleExpanded(id);
         render();
@@ -117,16 +123,24 @@ function handlesExpandButton(){
     });
 };
 
-function handlesExpansion(){
-    const newItemDescription = $('.js-bookmark-description-entry').val();
-    
+function handleFilter() {
+    $("#filter").click( event => {
+    event.preventDefault();
+    store.toggleFilter();
+    render();
+    console.log(store.ratingFilter);
+    });
+    render();
+    console.log(items);
 };
+
 
     
     function bindEventListeners() {
         generateAddItemForm();
         handleAddition();
         handlesExpandButton();
+        handleFilter();
         dropdown();
   
     };
@@ -137,7 +151,5 @@ function handlesExpansion(){
       bindEventListeners: bindEventListeners,
     };
   
-}
-
-());
+}());
   

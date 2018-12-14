@@ -17,7 +17,8 @@ const store = (function(){
     };
   
     const toggleFilter = function() {
-      this.hideFilteredItems = !this.hideFilteredItems;
+      
+      store.ratingFilter = $('select').val();
     };
     
     const toggleExpanded = function(id) {

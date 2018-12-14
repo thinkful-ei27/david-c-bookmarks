@@ -62,6 +62,7 @@ const api = (function () {
   return {
     getItems,
     createItem,
+    updateItem,
     deleteItem,
     errorMessage,
   };
