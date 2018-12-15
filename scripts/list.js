@@ -83,14 +83,18 @@ const bookmarkList = (function(){
 
    function generateItemElement(item){
         let itemDesc = item.expanded ? `<div class="column"> ${item.desc} </div>` : '';
+        let itemLink = item.expanded ? `<div class="column"> ${item.url} </div>` : '';
         console.log(itemDesc);
        return `
        <div class="${item.id}" class='row'>
         <div class= 'column'>${item.title}</div> 
-        <div class= 'column'>${item.url} </div>
-        <div class= 'column'>${item.rating}</div>
+        ${itemLink}
+        <div class= 'column'>Rating: ${item.rating}</div>
         ${itemDesc}
-        <label for="expanded-view">expand</label><button class= 'expand' data-item-index="${item.id}" type="button">Expand</button>
+        <label for="expanded-view"></label>
+        <button name= "expanded-view" class= 'expand' data-item-index="${item.id}" type="button">Expand</button>
+        <label for="deletion"></label>
+        <button name= "deletion" class= 'delete' type="button">Delete</button>
        </div>`
        ;
        
@@ -98,10 +102,19 @@ const bookmarkList = (function(){
 
 
 
-//    function handleDelete(){
-//     //    deletes bookmark from list
+   function handleDelete() {
+    $(".js-bookmark-list").on('click', ".delete",  event => {
+    event.preventDefault();
+    let itemToDelete = $(event.target).parent().attr('class');
+    api.deleteItem(itemToDelete);
+    store.findAndDelete(itemToDelete);
+    render(); 
 
-//    };
+    console.log(store.items);
+    });
+    render();
+    
+};
 
    function dropdown(){
     $("#filter").click(event => {
@@ -137,6 +150,7 @@ function handleFilter() {
 
     
     function bindEventListeners() {
+        handleDelete();
         generateAddItemForm();
         handleAddition();
         handlesExpandButton();

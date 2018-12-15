@@ -14,11 +14,11 @@ const store = (function(){
   
     const findAndDelete = function(id) {
       this.items = this.items.filter(item => item.id !== id);
+      console.log(store);
     };
   
     const toggleFilter = function() {
-      
-      store.ratingFilter = $('select').val();
+      store.ratingFilter === $('select').val();
     };
     
     const toggleExpanded = function(id) {
